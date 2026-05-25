@@ -1,0 +1,36 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowFullAccessTogkumaruserr",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "AIDA3WDGSXXYDGMNPDBXM"
+            },
+            "Action": "*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jpsl-cicd-dev",
+                "arn:aws:s3:::jfs-jpsl-cicd-dev/*"
+            ]
+        },
+        {
+            "Sid": "AllowRWAccessToSpecificUser",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::803374022128:role/jfs-jpsl-cicd-dev"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:GetObjectAcl",
+                "s3:PutObjectAcl",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jpsl-cicd-dev",
+                "arn:aws:s3:::jfs-jpsl-cicd-dev/*"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,100 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "allowuserjfs-jibl-tec",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::607174520731:user/jfs-jibl-tec"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:PutObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jibl-s3-tec-dev",
+                "arn:aws:s3:::jfs-jibl-s3-tec-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceVpce": "vpce-011cec2f0b2921e26"
+                },
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        },
+        {
+            "Sid": "AllowAccessViaVPCEndpointAndRole",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::607174520731:role/jfs-jibl-s3-tec"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jibl-s3-tec-dev",
+                "arn:aws:s3:::jfs-jibl-s3-tec-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:PrincipalArn": "arn:aws:iam::607174520731:role/jfs-jibl-s3-tec",
+                    "aws:SourceVpce": "vpce-011cec2f0b2921e26"
+                },
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        },
+        {
+            "Sid": "DenyIfNotFromVPC",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jibl-s3-tec-dev",
+                "arn:aws:s3:::jfs-jibl-s3-tec-dev/*"
+            ],
+            "Condition": {
+                "StringNotEquals": {
+                    "aws:SourceVpce": "vpce-011cec2f0b2921e26"
+                }
+            }
+        },
+        {
+            "Sid": "DenyIfPrincipalNotAllowed",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jibl-s3-tec-dev",
+                "arn:aws:s3:::jfs-jibl-s3-tec-dev/*"
+            ],
+            "Condition": {
+                "StringNotEquals": {
+                    "aws:PrincipalArn": [
+                        "arn:aws:iam::607174520731:role/jfs-jibl-s3-tec",
+                        "arn:aws:iam::607174520731:user/gkumar@inferyx.com",
+                        "arn:aws:iam::607174520731:user/jfs-jibl-tec"
+                    ]
+                }
+            }
+        }
+    ]
+}

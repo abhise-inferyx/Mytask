@@ -1,0 +1,119 @@
+{
+    "Version": "2012-10-17",
+    "Id": "S3-Console-Auto-Gen-Policy-1749030642001",
+    "Statement": [
+        {
+            "Sid": "S3PolicyStmt-DO-NOT-MODIFY-1749030641915",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "logging.s3.amazonaws.com"
+            },
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::jfs-jfpsl-s3-log/*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceAccount": "556689193548"
+                }
+            }
+        },
+        {
+            "Sid": "AWSCloudTrailAclCheck20150319-9a0d116e-9032-49fa-908b-84b4bb66ca3f",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "cloudtrail.amazonaws.com"
+            },
+            "Action": "s3:GetBucketAcl",
+            "Resource": "arn:aws:s3:::jfs-jfpsl-s3-log",
+            "Condition": {
+                "StringEquals": {
+                    "AWS:SourceArn": "arn:aws:cloudtrail:ap-south-1:556689193548:trail/jfs-jfpsl-s3-logs"
+                }
+            }
+        },
+        {
+            "Sid": "AWSCloudTrailWrite20150319-6c35e278-1a98-4334-976c-de04007b4220",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "cloudtrail.amazonaws.com"
+            },
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::jfs-jfpsl-s3-log/lz/AWSLogs/556689193548/*",
+            "Condition": {
+                "StringEquals": {
+                    "s3:x-amz-acl": "bucket-owner-full-control",
+                    "AWS:SourceArn": "arn:aws:cloudtrail:ap-south-1:556689193548:trail/jfs-jfpsl-s3-logs"
+                }
+            }
+        },
+        {
+            "Sid": "DenyIfOutSideCorporateNetwork",
+            "Effect": "Deny",
+            "Principal": {
+                "AWS": "arn:aws:iam::556689193548:role/aws-reserved/sso.amazonaws.com/ap-south-1/AWSReservedSSO_AWSAdministratorFullAccess_d1e1136084505dba"
+            },
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jfpsl-s3-log",
+                "arn:aws:s3:::jfs-jfpsl-s3-log/*"
+            ],
+            "Condition": {
+                "NotIpAddress": {
+                    "aws:SourceIp": [
+                        "162.10.218.54/32",
+                        "162.10.218.55/32",
+                        "162.10.219.201/32",
+                        "162.10.219.202/32",
+                        "162.10.221.212/32",
+                        "162.10.221.213/32",
+                        "162.10.224.201/32",
+                        "162.10.224.202/32",
+                        "162.10.228.212/32",
+                        "162.10.228.213/32",
+                        "24.239.143.215/32",
+                        "24.239.143.216/32",
+                        "24.239.150.217/32",
+                        "24.239.150.218/32",
+                        "24.239.151.213/32",
+                        "24.239.151.214/32",
+                        "116.50.84.112/32",
+                        "116.50.84.113/32",
+                        "116.50.84.114/32",
+                        "116.50.84.115/32",
+                        "116.50.84.116/32",
+                        "116.50.84.117/32",
+                        "116.50.84.118/32",
+                        "116.50.84.119/32",
+                        "15.207.168.99/32",
+                        "3.108.16.219/32",
+                        "202.131.123.162",
+                        "122.173.87.209"
+                    ]
+                },
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        },
+        {
+            "Sid": "GlobalDenyAllExceptTrusted",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jfpsl-s3-log",
+                "arn:aws:s3:::jfs-jfpsl-s3-log/*"
+            ],
+            "Condition": {
+                "Null": {
+                    "aws:PrincipalArn": "false"
+                },
+                "StringNotEquals": {
+                    "aws:PrincipalArn": [
+                        "arn:aws:iam::556689193548:role/aws-reserved/sso.amazonaws.com/ap-south-1/AWSReservedSSO_AWSAdministratorFullAccess_d1e1136084505dba",
+                        "arn:aws:iam::556689193548:role/aws-service-role/cloudtrail.amazonaws.com/AWSServiceRoleForCloudTrail"
+                    ]
+                }
+            }
+        }
+    ]
+}

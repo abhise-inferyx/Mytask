@@ -1,0 +1,81 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "allowusergkumar",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "AIDAXZNI5V76KEUSDZJG3"
+            },
+            "Action": "*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jba-s3-dsa-dev",
+                "arn:aws:s3:::jfs-jba-s3-dsa-dev/*"
+            ]
+        },
+        {
+            "Sid": "AllowReadOnlyAccessWithVPCEndpoint",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::535614566396:role/jfs-jba-s3-dsa-ro-dev"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jba-s3-dsa-dev",
+                "arn:aws:s3:::jfs-jba-s3-dsa-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:sourceVpce": "vpce-0db397016875d592f"
+                }
+            }
+        },
+        {
+            "Sid": "AllowReadWriteAccessWithVPCEndpoint",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::535614566396:role/jfs-jba-s3-dsa-rw-dev"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jba-s3-dsa-dev",
+                "arn:aws:s3:::jfs-jba-s3-dsa-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:sourceVpce": "vpce-0db397016875d592f"
+                }
+            }
+        },
+        {
+            "Sid": "DenyAllOtherAccess",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jba-s3-dsa-dev",
+                "arn:aws:s3:::jfs-jba-s3-dsa-dev/*"
+            ],
+            "Condition": {
+                "StringNotEquals": {
+                    "aws:sourceVpce": "vpce-0db397016875d592f"
+                }
+            }
+        }
+    ]
+}

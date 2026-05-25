@@ -1,0 +1,22 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowReadWriteListDeleteAccessForJfsJfaRole",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::648268429665:role/JFS-JFS-S3DLReadWriteAccess"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jfs-s3-dl-dev",
+                "arn:aws:s3:::jfs-jfs-s3-dl-dev/*"
+            ]
+        }
+    ]
+}

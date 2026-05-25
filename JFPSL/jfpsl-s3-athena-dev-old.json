@@ -1,0 +1,21 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowAthenaUserPutObject",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::556689193548:user/jfs-jfpsl-athena-dl-dev-ro"
+            },
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jfpsl-s3-athena-results-dev",
+                "arn:aws:s3:::jfs-jfpsl-s3-athena-results-dev/*"
+            ]
+        }
+    ]
+}

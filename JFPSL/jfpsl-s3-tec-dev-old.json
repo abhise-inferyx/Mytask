@@ -1,0 +1,53 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowRoleRWAccessViaVPCE",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::556689193548:role/jfs-jfpsl-s3-tec-rw"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jfpsl-s3-tec-dev",
+                "arn:aws:s3:::jfs-jfpsl-s3-tec-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceVpce": "vpce-0027c2370ad2a4496"
+                },
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        },
+        {
+            "Sid": "ExplicitDenyOthers",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jfpsl-s3-tec-dev",
+                "arn:aws:s3:::jfs-jfpsl-s3-tec-dev/*"
+            ],
+            "Condition": {
+                "StringNotEqualsIfExists": {
+                    "aws:SourceVpce": "vpce-0027c2370ad2a4496"
+                },
+                "StringNotLike": {
+                    "aws:PrincipalArn": "arn:aws:iam::556689193548:role/jfs-jfpsl-s3-tec-rw"
+                }
+            }
+        }
+    ]
+}

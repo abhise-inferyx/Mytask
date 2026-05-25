@@ -1,0 +1,130 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::803374022128:user/jfs-jpsl-dl"
+            },
+            "Action": "s3:ListBucket",
+            "Resource": [
+                "arn:aws:s3:::jfs-jpsl-s3-dl-dev",
+                "arn:aws:s3:::jfs-jpsl-s3-dl-dev/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::803374022128:user/jfs-jpsl-dl",
+                    "arn:aws:iam::803374022128:role/jfs-jpsl-s3-dl"
+                ]
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jpsl-s3-dl-dev",
+                "arn:aws:s3:::jfs-jpsl-s3-dl-dev/*"
+            ]
+        },
+        {
+            "Sid": "allowusergkumar@inferyx.com",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "AIDA3WDGSXXYDGMNPDBXM"
+            },
+            "Action": "*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jpsl-s3-dl-dev",
+                "arn:aws:s3:::jfs-jpsl-s3-dl-dev/*"
+            ]
+        },
+        {
+            "Sid": "allowDL-Crawler",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::803374022128:role/JFS-JPSL-DL-Crawler"
+            },
+            "Action": "*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jpsl-s3-dl-dev",
+                "arn:aws:s3:::jfs-jpsl-s3-dl-dev/*"
+            ]
+        },
+        {
+            "Sid": "allowDL-lakeformation",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::803374022128:role/aws-service-role/lakeformation.amazonaws.com/AWSServiceRoleForLakeFormationDataAccess"
+            },
+            "Action": "*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jpsl-s3-dl-dev",
+                "arn:aws:s3:::jfs-jpsl-s3-dl-dev/*"
+            ]
+        },
+        {
+            "Sid": "AllowAccessViaVPCEndpointAndRole",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::803374022128:role/JFS-JPSL-Athena-DL-PII"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jpsl-s3-dl-dev",
+                "arn:aws:s3:::jfs-jpsl-s3-dl-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:PrincipalArn": "arn:aws:iam::803374022128:role/JFS-JPSL-Athena-DL-PII",
+                    "aws:SourceVpce": "vpce-0278b465233181a2d"
+                },
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        },
+        {
+            "Sid": "DenyIfNotFromVPCAndRole",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jpsl-s3-dl-dev",
+                "arn:aws:s3:::jfs-jpsl-s3-dl-dev/*"
+            ],
+            "Condition": {
+                "StringNotEqualsIfExists": {
+                    "aws:SourceVpce": "vpce-0278b465233181a2d"
+                },
+                "StringNotEquals": {
+                    "aws:PrincipalArn": [
+                        "arn:aws:iam::803374022128:role/JFS-JPSL-Athena-DL-PII",
+                        "arn:aws:iam::803374022128:role/JFS-JPSL-DL-Crawler",
+                        "arn:aws:iam::803374022128:role/aws-service-role/lakeformation.amazonaws.com/AWSServiceRoleForLakeFormationDataAccess",
+                        "arn:aws:iam::803374022128:user/gkumar@inferyx.com@inferyx.com",
+                        "arn:aws:iam::803374022128:user/jfs-jpsl-dl",
+                        "arn:aws:iam::803374022128:role/jfs-jpsl-s3-dl",
+                        "arn:aws:iam::803374022128:user/jfs-jpsl-athena-dl-dev-ro",
+                        "arn:aws:iam::803374022128:role/aws-reserved/sso.amazonaws.com/ap-south-1/AWSReservedSSO_INFERYX_ADMINS_641a7d259a4e708e",
+                        "arn:aws:iam::803374022128:role/aws-reserved/sso.amazonaws.com/ap-south-1/AWSReservedSSO_JFS-JPSL-Athena-PII_d8fe180b4bcbbef0"
+                    ]
+                }
+            }
+        }
+    ]
+}

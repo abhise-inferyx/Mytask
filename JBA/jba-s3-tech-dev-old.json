@@ -1,0 +1,69 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "allowusergkumar",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "AIDAXZNI5V76KEUSDZJG3"
+            },
+            "Action": "*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jba-s3-tec-dev",
+                "arn:aws:s3:::jfs-jba-s3-tec-dev/*"
+            ]
+        },
+        {
+            "Sid": "AllowAccessViaVPCEndpointAndRole",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::535614566396:role/jfs-jba-s3-tec-rw-dev"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jba-s3-tec-dev",
+                "arn:aws:s3:::jfs-jba-s3-tec-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:PrincipalArn": "arn:aws:iam::535614566396:role/jfs-jba-s3-tec-rw-dev",
+                    "aws:SourceVpce": "vpce-0db397016875d592f"
+                },
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        },
+        {
+            "Sid": "DenyIfNotFromVPCAndRole",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jba-s3-tec-dev",
+                "arn:aws:s3:::jfs-jba-s3-tec-dev/*"
+            ],
+            "Condition": {
+                "StringNotEqualsIfExists": {
+                    "aws:SourceVpce": "vpce-0db397016875d592f"
+                },
+                "StringNotEquals": {
+                    "aws:PrincipalArn": [
+                        "arn:aws:iam::535614566396:role/jfs-jba-s3-tec-rw-dev",
+                        "arn:aws:iam::535614566396:user/gkumar@inferyx.com"
+                    ]
+                }
+            }
+        }
+    ]
+}

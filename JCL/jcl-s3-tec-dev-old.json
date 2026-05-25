@@ -1,0 +1,69 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "allowusergkumar",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "AIDAU5LH52WSEDZHJ7FPR"
+            },
+            "Action": "*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jfl-s3-tec-dev",
+                "arn:aws:s3:::jfs-jfl-s3-tec-dev/*"
+            ]
+        },
+        {
+            "Sid": "AllowAccessViaVPCEndpointAndRole",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::337909765540:user/jfs-jfl-tec"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jfl-s3-tec-dev",
+                "arn:aws:s3:::jfs-jfl-s3-tec-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceVpce": "vpce-08abe8705fde51184",
+                    "aws:PrincipalArn": "arn:aws:iam::337909765540:role/jfs-jfl-s3-tec-rw"
+                },
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        },
+        {
+            "Sid": "DenyIfNotFromVPCAndRole",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jfl-s3-tec-dev",
+                "arn:aws:s3:::jfs-jfl-s3-tec-dev/*"
+            ],
+            "Condition": {
+                "StringNotEqualsIfExists": {
+                    "aws:SourceVpce": "vpce-08abe8705fde51184"
+                },
+                "StringNotEquals": {
+                    "aws:PrincipalArn": [
+                        "arn:aws:iam::337909765540:role/jfs-jfl-s3-tec-rw",
+                        "arn:aws:iam::337909765540:user/gkumar@inferyx.com"
+                    ]
+                }
+            }
+        }
+    ]
+}

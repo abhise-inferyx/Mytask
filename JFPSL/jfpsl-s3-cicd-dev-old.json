@@ -1,0 +1,43 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowRWAccessRoleJfs-jfpsl-cicd-dev",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::556689193548:role/jfs-jfpsl-cicd-dev"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:GetObjectAcl",
+                "s3:PutObjectAcl",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jfpsl-cicd-dev",
+                "arn:aws:s3:::jfs-jfpsl-cicd-dev/*"
+            ]
+        },
+        {
+            "Sid": "AllowRWAccessToLambdaPatchRole",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::556689193548:role/service-role/jfs-jfpsl-cicd-dev-role-kwbbcsse"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:GetObjectAcl",
+                "s3:PutObjectAcl",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jfpsl-cicd-dev",
+                "arn:aws:s3:::jfs-jfpsl-cicd-dev/*"
+            ]
+        }
+    ]
+}

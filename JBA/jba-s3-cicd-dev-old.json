@@ -1,0 +1,24 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowRWAccessToSpecificUser",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::535614566396:role/jfs-jba-cicd-dev"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:GetObjectAcl",
+                "s3:PutObjectAcl",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jba-s3-cicd-dev",
+                "arn:aws:s3:::jfs-jba-s3-cicd-dev/*"
+            ]
+        }
+    ]
+}

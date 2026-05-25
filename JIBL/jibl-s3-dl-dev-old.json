@@ -1,0 +1,99 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowFullAccessToAllUsersInVpc",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::607174520731:user/jfs-jibl-tec",
+                    "arn:aws:iam::607174520731:user/jfs-jibl-dl",
+                    "arn:aws:iam::607174520731:user/jfs-jibl-dsa"
+                ]
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jibl-s3-dl-dev",
+                "arn:aws:s3:::jfs-jibl-s3-dl-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceVpce": "vpce-011cec2f0b2921e26"
+                }
+            }
+        },
+        {
+            "Sid": "AllowFullAccessToAllRolesInVpc",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::607174520731:role/jfs-jibl-s3-dl",
+                    "arn:aws:iam::607174520731:role/jfs-jibl-s3-dsa"
+                ]
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jibl-s3-dl-dev",
+                "arn:aws:s3:::jfs-jibl-s3-dl-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceVpce": "vpce-011cec2f0b2921e26"
+                }
+            }
+        },
+        {
+            "Sid": "AllowReadOnlyForTecUserInVpc",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::607174520731:user/jfs-jibl-tec"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jibl-s3-dl-dev",
+                "arn:aws:s3:::jfs-jibl-s3-dl-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceVpce": "vpce-011cec2f0b2921e26"
+                }
+            }
+        },
+        {
+            "Sid": "AllowReadOnlyForTecRoleInVpc",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::607174520731:role/aws-reserved/sso.amazonaws.com/ap-south-1/AWSReservedSSO_JFS-JIBL-DSA-PII-Users_438101bf1504bbf6",
+                    "arn:aws:iam::607174520731:role/jfs-jibl-s3-tec"
+                ]
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jibl-s3-dl-dev",
+                "arn:aws:s3:::jfs-jibl-s3-dl-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceVpce": "vpce-011cec2f0b2921e26"
+                }
+            }
+        }
+    ]
+}

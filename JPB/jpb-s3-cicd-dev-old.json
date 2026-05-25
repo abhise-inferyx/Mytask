@@ -1,0 +1,57 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowRWAccessToSpecificUser",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::881273802834:role/service-role/jfs-jpb-cicd-dev-role-5sqaj7n6",
+                    "arn:aws:iam::881273802834:role/jfs-jpb-cicd-dev"
+                ]
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:GetObjectAcl",
+                "s3:PutObjectAcl",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-cicd-dev",
+                "arn:aws:s3:::jfs-jpb-cicd-dev/*"
+            ]
+        },
+        {
+            "Sid": "DenyInsecureTransport",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-cicd-dev",
+                "arn:aws:s3:::jfs-jpb-cicd-dev/*"
+            ],
+            "Condition": {
+                "Bool": {
+                    "aws:SecureTransport": "false"
+                }
+            }
+        },
+        {
+            "Sid": "DenyNonSigV4Requests",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-cicd-dev",
+                "arn:aws:s3:::jfs-jpb-cicd-dev/*"
+            ],
+            "Condition": {
+                "StringNotEquals": {
+                    "s3:SignatureVersion": "AWS4-HMAC-SHA256"
+                }
+            }
+        }
+    ]
+}

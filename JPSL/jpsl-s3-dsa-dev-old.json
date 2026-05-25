@@ -1,0 +1,107 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowUserGKumar",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "AIDA3WDGSXXYDGMNPDBXM"
+            },
+            "Action": "*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jpsl-s3-dsa-dev",
+                "arn:aws:s3:::jfs-jpsl-s3-dsa-dev/*"
+            ]
+        },
+        {
+            "Sid": "AllowUserListBucket",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::803374022128:user/jfs-jpsl-dsa"
+            },
+            "Action": "s3:ListBucket",
+            "Resource": "arn:aws:s3:::jfs-jpsl-s3-dsa-dev"
+        },
+        {
+            "Sid": "AllowUserforcred",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::803374022128:user/jfs-jpsl-dsa"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": "arn:aws:s3:::jfs-jpsl-s3-dsa-dev/*"
+        },
+        {
+            "Sid": "AllowUserjfs-jpsl-dsa-withRoleViaVPCActionsListBucket",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::803374022128:role/jfs-jpsl-s3-dsa"
+            },
+            "Action": "s3:ListBucket",
+            "Resource": [
+                "arn:aws:s3:::jfs-jpsl-s3-dsa-dev",
+                "arn:aws:s3:::jfs-jpsl-s3-dsa-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceVpce": "vpce-0278b465233181a2d"
+                },
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        },
+        {
+            "Sid": "AllowUserjfs-jpsl-dsa-withRoleViaVPCActions",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::803374022128:role/jfs-jpsl-s3-dsa"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": "arn:aws:s3:::jfs-jpsl-s3-dsa-dev/*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceVpce": "vpce-0278b465233181a2d"
+                },
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        },
+        {
+            "Sid": "DenyAllIfNotMatchingVPCEOrRole",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jpsl-s3-dsa-dev",
+                "arn:aws:s3:::jfs-jpsl-s3-dsa-dev/*"
+            ],
+            "Condition": {
+                "StringNotEqualsIfExists": {
+                    "aws:SourceVpce": "vpce-0278b465233181a2d"
+                },
+                "StringNotEquals": {
+                    "aws:PrincipalArn": [
+                        "arn:aws:iam::803374022128:user/gkumar@inferyx.com",
+                        "arn:aws:iam::803374022128:user/jfs-jpsl-dsa",
+                        "arn:aws:iam::803374022128:role/jfs-jpsl-s3-dsa"
+                    ]
+                }
+            }
+        }
+    ]
+}

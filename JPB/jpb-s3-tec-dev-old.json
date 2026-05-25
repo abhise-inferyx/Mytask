@@ -1,0 +1,88 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowAccessViaVPCEndpointAndRole",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::881273802834:user/jfs-jpb-tec"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-s3-tec-dev",
+                "arn:aws:s3:::jfs-jpb-s3-tec-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:PrincipalArn": "arn:aws:iam::881273802834:role/jfs-jpb-s3-tec",
+                    "aws:SourceVpce": "vpce-0e9dca1e9dc62d8e2"
+                },
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        },
+        {
+            "Sid": "DenyIfNotFromVPCAndRole",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-s3-tec-dev",
+                "arn:aws:s3:::jfs-jpb-s3-tec-dev/*"
+            ],
+            "Condition": {
+                "StringNotEqualsIfExists": {
+                    "aws:SourceVpce": "vpce-0e9dca1e9dc62d8e2"
+                },
+                "StringNotEquals": {
+                    "aws:PrincipalArn": [
+                        "arn:aws:iam::881273802834:role/jfs-jpb-s3-tec",
+                        "arn:aws:iam::881273802834:user/gkumar@inferyx.com",
+                        "arn:aws:iam::881273802834:user/jfs-jpb-tec"
+                    ]
+                }
+            }
+        },
+        {
+            "Sid": "DenyInsecureTransport",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-s3-tec-dev",
+                "arn:aws:s3:::jfs-jpb-s3-tec-dev/*"
+            ],
+            "Condition": {
+                "Bool": {
+                    "aws:SecureTransport": "false"
+                }
+            }
+        },
+        {
+            "Sid": "DenyNonSigV4Requests",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-s3-tec-dev",
+                "arn:aws:s3:::jfs-jpb-s3-tec-dev/*"
+            ],
+            "Condition": {
+                "StringNotEquals": {
+                    "s3:SignatureVersion": "AWS4-HMAC-SHA256"
+                }
+            }
+        }
+    ]
+}

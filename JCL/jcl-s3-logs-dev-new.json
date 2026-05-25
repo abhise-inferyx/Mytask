@@ -1,0 +1,155 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "S3PolicyStmt-DO-NOT-MODIFY-1751961606770",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "logging.s3.amazonaws.com"
+            },
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::jfs-jfl-s3-log-dev/*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceAccount": "337909765540"
+                }
+            }
+        },
+        {
+            "Sid": "AWSCloudTrailAclCheck20150319-263097b5-b44e-4064-8ee3-367a9477ddca",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "cloudtrail.amazonaws.com"
+            },
+            "Action": "s3:GetBucketAcl",
+            "Resource": "arn:aws:s3:::jfs-jfl-s3-log-dev",
+            "Condition": {
+                "StringEquals": {
+                    "AWS:SourceArn": "arn:aws:cloudtrail:ap-south-1:337909765540:trail/jfs-jfl-s3-log-dev"
+                }
+            }
+        },
+        {
+            "Sid": "AWSCloudTrailWrite20150319-b213fa52-cf69-4cdc-b8a8-bb7fe03c90fa",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "cloudtrail.amazonaws.com"
+            },
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::jfs-jfl-s3-log-dev/jfs-jfl-s3-lz-dev/AWSLogs/337909765540/*",
+            "Condition": {
+                "StringEquals": {
+                    "s3:x-amz-acl": "bucket-owner-full-control",
+                    "AWS:SourceArn": "arn:aws:cloudtrail:ap-south-1:337909765540:trail/jfs-jfl-s3-log-dev"
+                }
+            }
+        },
+        {
+            "Sid": "DenyWritesFromSelfToAvoidRecursiveLogging",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::jfs-jfl-s3-log-dev/*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceArn": "arn:aws:s3:::jfs-jfl-s3-log-dev"
+                }
+            }
+        },
+        {
+            "Sid": "AWSCloudTrailAclCheck20150319-b54f8f94-6f04-4fef-bfc4-ff77325e0df6",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "cloudtrail.amazonaws.com"
+            },
+            "Action": "s3:GetBucketAcl",
+            "Resource": "arn:aws:s3:::jfs-jfl-s3-log-dev",
+            "Condition": {
+                "StringEquals": {
+                    "AWS:SourceArn": "arn:aws:cloudtrail:ap-south-1:337909765540:trail/JFS-JFL-S3-CloudTrail"
+                }
+            }
+        },
+        {
+            "Sid": "AWSCloudTrailWrite20150319-fb377ed5-38bc-4374-97a8-1b6081411973",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "cloudtrail.amazonaws.com"
+            },
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::jfs-jfl-s3-log-dev/CloudTrail/AWSLogs/337909765540/*",
+            "Condition": {
+                "StringEquals": {
+                    "s3:x-amz-acl": "bucket-owner-full-control",
+                    "AWS:SourceArn": "arn:aws:cloudtrail:ap-south-1:337909765540:trail/JFS-JFL-S3-CloudTrail"
+                }
+            }
+        },
+        {
+            "Sid": "AmazonBedrockLogsWrite",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "bedrock.amazonaws.com"
+            },
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::jfs-jfl-s3-log-dev/bedrock/AWSLogs/337909765540/BedrockModelInvocationLogs/*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceAccount": "337909765540"
+                },
+                "ArnLike": {
+                    "aws:SourceArn": "arn:aws:bedrock:ap-south-1:337909765540:*"
+                }
+            }
+        },
+        {
+            "Sid": "DenyIfOutSideCorporateNetwork",
+            "Effect": "Deny",
+            "Principal": {
+                "AWS": "arn:aws:iam::337909765540:role/aws-reserved/sso.amazonaws.com/ap-south-1/AWSReservedSSO_AWSAdministratorFullAccess_a6e30fda4303c15d"
+            },
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jfl-s3-log-dev",
+                "arn:aws:s3:::jfs-jfl-s3-log-dev/*"
+            ],
+            "Condition": {
+                "NotIpAddress": {
+                    "aws:SourceIp": [
+                        "162.10.218.54/32",
+                        "162.10.218.55/32",
+                        "162.10.219.201/32",
+                        "162.10.219.202/32",
+                        "162.10.221.212/32",
+                        "162.10.221.213/32",
+                        "162.10.224.201/32",
+                        "162.10.224.202/32",
+                        "162.10.228.212/32",
+                        "162.10.228.213/32",
+                        "24.239.143.215/32",
+                        "24.239.143.216/32",
+                        "24.239.150.217/32",
+                        "24.239.150.218/32",
+                        "24.239.151.213/32",
+                        "24.239.151.214/32",
+                        "116.50.84.112/32",
+                        "116.50.84.113/32",
+                        "116.50.84.114/32",
+                        "116.50.84.115/32",
+                        "116.50.84.116/32",
+                        "116.50.84.117/32",
+                        "116.50.84.118/32",
+                        "116.50.84.119/32",
+                        "15.207.168.99/32",
+                        "3.108.16.219/32",
+                        "202.131.123.162",
+                        "122.173.87.209"
+                    ]
+                },
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        }
+    ]
+}

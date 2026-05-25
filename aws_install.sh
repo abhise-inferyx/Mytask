@@ -1,0 +1,1 @@
+aws s3 ls s3://jfs-jpb-s3-athena-results-dev/ --profile jfs-jpb-recon-dev

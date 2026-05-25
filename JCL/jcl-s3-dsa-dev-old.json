@@ -1,0 +1,129 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowListBucket",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::337909765540:user/jfs-jfl-dsa",
+                    "arn:aws:iam::337909765540:role/aws-reserved/sso.amazonaws.com/ap-south-1/AWSReservedSSO_AWSAdministratorFullAccess_a6e30fda4303c15d",
+                    "arn:aws:iam::337909765540:role/jfs-jfl-dl"
+                ]
+            },
+            "Action": "s3:ListBucket",
+            "Resource": [
+                "arn:aws:s3:::jfs-jfl-s3-dsa-dev",
+                "arn:aws:s3:::jfs-jfl-s3-dsa-dev/*"
+            ],
+            "Condition": {
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        },
+        {
+            "Sid": "AllowGetBucketObject",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::337909765540:user/jfs-jfl-dsa",
+                    "arn:aws:iam::337909765540:role/jfs-jfl-s3-dsa-rw",
+                    "arn:aws:iam::337909765540:role/jfs-jfl-dl"
+                ]
+            },
+            "Action": "s3:GetObject",
+            "Resource": [
+                "arn:aws:s3:::jfs-jfl-s3-dsa-dev",
+                "arn:aws:s3:::jfs-jfl-s3-dsa-dev/*"
+            ],
+            "Condition": {
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        },
+        {
+            "Sid": "AllowUserJfsJflDsaFromVPC",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::337909765540:user/jfs-jfl-dsa"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:PutObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jfl-s3-dsa-dev",
+                "arn:aws:s3:::jfs-jfl-s3-dsa-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceVpce": "vpce-08abe8705fde51184"
+                },
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        },
+        {
+            "Sid": "AllowRoleJfsJflDsaRWFromVPC",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::337909765540:role/aws-reserved/sso.amazonaws.com/ap-south-1/AWSReservedSSO_JFS-JFL-DSA-PII-Users_7e2d1ea1089cf3ab",
+                    "arn:aws:iam::337909765540:role/aws-reserved/sso.amazonaws.com/ap-south-1/AWSReservedSSO_AWSAdministratorFullAccess_a6e30fda4303c15d",
+                    "arn:aws:iam::337909765540:role/jfs-jfl-s3-dsa-rw"
+                ]
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jfl-s3-dsa-dev",
+                "arn:aws:s3:::jfs-jfl-s3-dsa-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceVpce": "vpce-08abe8705fde51184",
+                    "aws:PrincipalArn": "arn:aws:iam::337909765540:role/jfs-jfl-s3-dsa-rw"
+                },
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        },
+        {
+            "Sid": "DenyIfPrincipalIsNotAllowed",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jfl-s3-dsa-dev",
+                "arn:aws:s3:::jfs-jfl-s3-dsa-dev/*"
+            ],
+            "Condition": {
+                "StringNotEquals": {
+                    "aws:PrincipalArn": [
+                        "arn:aws:iam::337909765540:role/jfs-jfl-dl",
+                        "arn:aws:iam::337909765540:role/aws-reserved/sso.amazonaws.com/ap-south-1/AWSReservedSSO_AWSAdministratorFullAccess_a6e30fda4303c15d",
+                        "arn:aws:iam::337909765540:user/jfs-jfl-dsa",
+                        "arn:aws:iam::337909765540:role/jfs-jfl-s3-dsa-rw",
+                        "arn:aws:iam::337909765540:role/aws-reserved/sso.amazonaws.com/ap-south-1/AWSReservedSSO_JFS-JFL-DSA-PII-Users_7e2d1ea1089cf3ab",
+                        "arn:aws:iam::337909765540:role/aws-reserved/sso.amazonaws.com/ap-south-1/AWSReservedSSO_JFS-JFL-Dev-Athena-PII_7363471b5c59c2a2"
+                    ]
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,66 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "DenyInsecureTransport",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-s3-athena-results-dev",
+                "arn:aws:s3:::jfs-jpb-s3-athena-results-dev/*"
+            ],
+            "Condition": {
+                "Bool": {
+                    "aws:SecureTransport": "false"
+                }
+            }
+        },
+        {
+            "Sid": "DenyNonSigV4Requests",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-s3-athena-results-dev",
+                "arn:aws:s3:::jfs-jpb-s3-athena-results-dev/*"
+            ],
+            "Condition": {
+                "StringNotEquals": {
+                    "s3:SignatureVersion": "AWS4-HMAC-SHA256"
+                }
+            }
+        },
+        {
+            "Sid": "AllowAccessToReconDevRole",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::881273802834:role/jfs-jpb-recon-dev"
+            },
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-s3-athena-results-dev",
+                "arn:aws:s3:::jfs-jpb-s3-athena-results-dev/*"
+            ]
+        },
+        {
+            "Sid": "S3PolicyStmt-DO-NOT-MODIFY-1766990910253",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "logging.s3.amazonaws.com"
+            },
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::jfs-jpb-s3-athena-results-dev/*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceAccount": "881273802834"
+                }
+            }
+        }
+    ]
+}

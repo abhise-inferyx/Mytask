@@ -1,0 +1,160 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowListAccessToDLUser",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::881273802834:user/jfs-jpb-dl"
+            },
+            "Action": "s3:ListBucket",
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-s3-dl-dev",
+                "arn:aws:s3:::jfs-jpb-s3-dl-dev/*"
+            ]
+        },
+        {
+            "Sid": "AllowListAccessToJFS-JPB-DSA-PII-Users",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::881273802834:role/aws-reserved/sso.amazonaws.com/ap-south-1/AWSReservedSSO_JFS-JPB-DSA-PII-Users_f551106ef00afa1f"
+            },
+            "Action": "s3:ListBucket",
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-s3-dl-dev",
+                "arn:aws:s3:::jfs-jpb-s3-dl-dev/*"
+            ]
+        },
+        {
+            "Sid": "AllowFullAccessToDLUser",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::017182166917:role/aws-reserved/sso.amazonaws.com/ap-south-1/AWSReservedSSO_INFERYX_ADMINS_b5bc76017c7dab5c",
+                    "arn:aws:iam::881273802834:user/jfs-jpb-dl"
+                ]
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-s3-dl-dev",
+                "arn:aws:s3:::jfs-jpb-s3-dl-dev/*"
+            ]
+        },
+        {
+            "Sid": "AllowFullAccessToGKumar",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::881273802834:role/JFS-JPB-DL-Crawler"
+            },
+            "Action": "*",
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-s3-dl-dev",
+                "arn:aws:s3:::jfs-jpb-s3-dl-dev/*"
+            ]
+        },
+        {
+            "Sid": "AllowReadOnlyToDsaAndTecUsers",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::881273802834:user/jfs-jpb-tec",
+                    "arn:aws:iam::881273802834:user/JFS-JPB-DSA",
+                    "arn:aws:iam::881273802834:user/jfs-jpb-recon-dev"
+                ]
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-s3-dl-dev",
+                "arn:aws:s3:::jfs-jpb-s3-dl-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceVpce": "vpce-0e9dca1e9dc62d8e2"
+                }
+            }
+        },
+        {
+            "Sid": "AllowReadWriteToJfsJpbS3DlRole",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::881273802834:role/jfs-jpb-s3-dl"
+            },
+            "Action": [
+                "s3:Get*",
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-s3-dl-dev",
+                "arn:aws:s3:::jfs-jpb-s3-dl-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceVpce": "vpce-0e9dca1e9dc62d8e2",
+                    "aws:PrincipalArn": "arn:aws:iam::881273802834:role/jfs-jpb-s3-dl"
+                },
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        },
+        {
+            "Sid": "AllowReadWriteToDevRWUser",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::881273802834:user/jfs-jpb-s3-dl-dev-rw"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-s3-dl-dev",
+                "arn:aws:s3:::jfs-jpb-s3-dl-dev/*"
+            ]
+        },
+        {
+            "Sid": "AllowReadOnlyToTecAndDsaRoles",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::881273802834:role/jfs-jpb-s3-tec",
+                    "arn:aws:iam::881273802834:user/jfs-jpb-recon-dev",
+                    "arn:aws:iam::881273802834:role/jfs-jpb-s3-dsa"
+                ]
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::jfs-jpb-s3-dl-dev",
+                "arn:aws:s3:::jfs-jpb-s3-dl-dev/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceVpce": "vpce-0e9dca1e9dc62d8e2",
+                    "aws:PrincipalArn": [
+                        "arn:aws:iam::881273802834:role/jfs-jpb-s3-dsa",
+                        "arn:aws:iam::881273802834:role/jfs-jpb-s3-tec",
+                        "arn:aws:iam::881273802834:user/jfs-jpb-recon-dev"
+                    ]
+                },
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        }
+    ]
+}
